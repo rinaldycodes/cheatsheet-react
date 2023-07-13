@@ -1,0 +1,9 @@
+// FOR EASY HANDLE INPUT ON REACT 
+const handleInputChange = async (name, value) => {
+
+    set_form((prevFormData) => ({
+      ...prevFormData,
+      [name]: value
+    }));
+
+};
