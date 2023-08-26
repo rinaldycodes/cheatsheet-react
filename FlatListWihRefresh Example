@@ -1,0 +1,17 @@
+<FlatListWithRefresh 
+    data={form.filtered_data}
+    fetchData={getApiTimeOff}
+    renderItem={({item}) => {
+        return (
+            <List.Item
+                style={{
+                    borderBottomWidth: 1,
+                    borderBottomColor: 'gainsboro'
+                }}
+                title={item.display_name}
+                titleNumberOfLines={2}
+                left={props => <List.Icon {...props} icon="calendar" />}
+            />
+        )
+    }}
+/>
