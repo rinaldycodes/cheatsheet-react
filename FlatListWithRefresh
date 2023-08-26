@@ -1,0 +1,95 @@
+import React, { useState, useEffect } from 'react';
+import { SafeAreaView } from 'react-native';
+import { View, FlatList, Text, RefreshControl, StyleSheet } from 'react-native';
+
+
+
+const FlatListWithRefresh = ({ data: initialData, renderItem, fetchData, height }) => {
+    const [loading, set_loading] = useState(true);
+  const [data, setData] = useState(initialData); // Data untuk ditampilkan di dalam FlatList
+  const [refreshing, setRefreshing] = useState(false); // Status refresh
+
+  useEffect(() => {
+    setTimeout(() => {
+        set_loading(false)
+    }, 1000);
+    setData(initialData);
+    console.log('initaa', initialData)
+  }, [initialData]);
+
+  // Fungsi untuk mengambil data (contoh sederhana)
+  const fetchDataX = async () => {
+      setData([]);
+      set_loading(true);
+    // setTimeout(() => {
+        await fetchData()
+        set_loading(false);
+        setRefreshing(false);
+    // }, 1500);
+  };
+
+  // Fungsi untuk memicu refresh
+  const handleRefresh = () => {
+    setRefreshing(true);
+    // Panggil fungsi untuk mengambil data baru
+    fetchDataX();
+  };
+
+  const renderEmptyComponent = () => (
+    <View style={styles.emptyContainer}>
+      {loading ? (
+        <Text style={styles.emptyText}>Waiting a minutes...</Text>
+      ) : (
+        <Text style={styles.emptyText}>No items available</Text>
+      )}
+    </View>
+  );
+
+  // if ( loading ) {
+  //   return (
+  //     <Text style={{ textAlign: 'center', marginTop: 15}}>Waiting a minutes...</Text>
+  //     )
+  // }
+
+  return (
+    <>
+    
+        <FlatList
+            style={{
+                height: (height?height:undefined)
+            }}
+        data={data}
+        renderItem={renderItem}
+        keyExtractor={(item, index) => index.toString()}
+        refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+        }
+
+        ListEmptyComponent={renderEmptyComponent}
+        />
+    </>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#F5F5F5',
+  },
+  item: {
+    padding: 10,
+    fontSize: 18,
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 100,
+  },
+  emptyText: {
+    fontSize: 20,
+    color: 'gray',
+  },
+});
+
+export default FlatListWithRefresh;
